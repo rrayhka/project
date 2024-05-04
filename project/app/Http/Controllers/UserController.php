@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Arr;
+use App\Http\Requests\UserRequest;
 
 class UserController extends Controller{
     public function index(){
@@ -22,17 +23,17 @@ class UserController extends Controller{
                 "title" => "Create New User",
                 "description" => "Create New User",
                 "method" => "POST",
-                "url" => "/users",
+                "url" => route('users.store'),
                 "submit_text" => "Create"
             ]
         ]
     );
     }
 
-    public function store(Request $request){
-        $validated = $request->validate($this->requestValidated());
+    public function store(UserRequest $request){
+        $validated = $request->validated();
         User::create($validated);
-        return redirect('/users');
+        return to_route('users.index');
     }
 
     public function show(User $user){
@@ -48,24 +49,20 @@ class UserController extends Controller{
                 "title" => "Edit User : ". $user->name,
                 "description" => "Edit User: ",
                 "method" => "PUT",
-                "url" => "/users/{$user->id}",
+                "url" => route('users.update', $user->id),
                 "submit_text" => "Update"
             ]
         ]);
     }
 
-    public function update(Request $request, User $user){
-        $user->update($request->validate($this->requestValidated()));
+    public function update(UserRequest $request, User $user){
+        $user->update($request->validated());
     
-        return redirect('/users');
+        return to_route('users.index');
     }
 
-    protected function requestValidated() : Array
-    {
-        return [
-            'name' => ['required', 'min:3', 'max:255', 'string'],
-            'email' => ['required', 'email'],
-            'password' => ['required', 'min:8']
-        ];
+    public function destroy(User $user){
+        $user->delete();
+        return to_route('users.index');
     }
 }

@@ -3,13 +3,24 @@
         {{ $user->name }}
     </x-slot>
 
-    {{-- gimme layout for viewing user --}}
     <div class="mt-8">
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div class="px-4 py-5 sm:px-6">
-                <h3 class="text-lg font-medium leading-6 text-gray-900">User Information</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
+            <div class="flex justify-between">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">User Information</h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
+                </div>
+                <div class="px-4 py-5 sm:px-6 text-right">
+                    <form action="{{ route('users.destroy', $user) }}" method="post">
+                        @csrf
+                        @method('delete')
+                        <x-button type="submit" class="bg-red-500">
+                            Delete
+                        </x-button>
+                    </form>
+                </div>
             </div>
+            
             <div class="border-t border-gray-200">
                 <dl>
                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

@@ -9,10 +9,26 @@
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <!-- Current: "bg-zinc-900 text-white", Default: "text-zinc-300 hover:bg-zinc-700 hover:text-white" -->
-                        <x-navbar.link href="/">Home</x-navbar.link>
-                        <x-navbar.link href="/about">About</x-navbar.link>
-                        <x-navbar.link href="/contact">Contact</x-navbar.link>
-                        <x-navbar.link href="/users">Users</x-navbar.link>
+                        <x-navbar.link href="{{ route('home') }}">Home</x-navbar.link>
+                        <x-navbar.link href="{{ route('about') }}">About</x-navbar.link>
+                        <x-navbar.link href="{{ route('contact') }}">Contact</x-navbar.link>
+                        @auth
+                            <x-navbar.link href="{{ route('users.index') }}">Users</x-navbar.link>
+                        @endauth
+                        @auth
+                            <x-navbar.link href="#">
+                                {{ auth()->user()->name }}
+                            </x-navbar.link>
+                            <form action="{{ route('logout') }}" method="post" class="inline">
+                                @csrf
+                                <x-button type="submit">
+                                    Log Out
+                                </x-button>
+                            </form>
+                            @else
+                            <x-navbar.link href="{{ route('login') }}">Login</x-navbar.link>
+                        @endauth
+                        
                     </div>
                 </div>
             </div>
@@ -44,10 +60,11 @@
     <div class="md:hidden" id="mobile-menu">
         <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
             <!-- Current: "bg-zinc-900 text-white", Default: "text-zinc-300 hover:bg-zinc-700 hover:text-white" -->
-            <x-navbar.dropdown-item href="/">Home</x-navbar.dropdown-item>
-            <x-navbar.dropdown-item href="/about">About</x-navbar.dropdown-item>
-            <x-navbar.dropdown-item href="/contact">Contact</x-navbar.dropdown-item>
-            <x-navbar.dropdown-item href="/users">Users</x-navbar.dropdown-item>
+            <x-navbar.dropdown-item href="{{ route('home') }}">Home</x-navbar.dropdown-item>
+            <x-navbar.dropdown-item href="{{ route('about') }}">About</x-navbar.dropdown-item>
+            <x-navbar.dropdown-item href="{{ route('contact') }}">Contact</x-navbar.dropdown-item>
+            <x-navbar.dropdown-item href="{{ route('users.index') }}">Users</x-navbar.dropdown-item>
+            <x-navbar.dropdown-item href="{{ route('login') }}">Login</x-navbar.dropdown-item>
         </div>
     </div>
 </nav>
